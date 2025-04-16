@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { attendanceService } from "../../appwrite/Attendence"; // Adjust path as needed
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import "./calendarStyle.css"; // Add custom classes here
+
 
 function AttendancePage() {
   const [attendance, setAttendance] = useState(null);
