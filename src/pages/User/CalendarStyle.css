@@ -1,0 +1,16 @@
+/* CSS for attended days (green) */
+.present-day {
+  background-color: #4CAF50 !important; /* Green color */
+  color: white !important; /* White text */
+}
+
+/* Optional: You can add a style for hovered or selected days */
+.react-calendar__tile--active {
+  border-radius: 50%;
+}
+
+/* You can also add styles for absent days if needed */
+.absent-day {
+  background-color: #F44336 !important; /* Red color for absent */
+  color: white !important;
+}
