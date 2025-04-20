@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { attendanceService } from "../../appwrite/Attendence"; // Adjust path as needed
+import { attendanceService } from "../../appwrite/Attendence";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-
+import { motion } from "framer-motion";
 
 function AttendancePage() {
   const [attendance, setAttendance] = useState(null);
   const [attendanceHistory, setAttendanceHistory] = useState([]);
   const [loading, setLoading] = useState(true);
-  const userData = useSelector((state) => state.auth.userData); // Adjust based on your redux structure
+  const userData = useSelector((state) => state.auth.userData);
 
   useEffect(() => {
     if (userData) {
@@ -43,10 +43,10 @@ function AttendancePage() {
 
   const getTileClassName = ({ date, view }) => {
     if (view === "month") {
-      const iso = date.toISOString().split("T")[0]; // Convert date to ISO format
+      const iso = date.toISOString().split("T")[0];
       const entry = attendanceHistory.find((e) => e.date === iso);
       if (entry && entry.attended) {
-        return "present-day"; // Add 'present-day' class for attended days
+        return "present-day";
       }
     }
     return null;
@@ -65,57 +65,83 @@ function AttendancePage() {
   }
 
   return (
-    <div className="p-10">
-      <h2 className="text-3xl font-semibold text-center mb-10">My Gym Attendance</h2>
+    <motion.div
+      className="max-w-5xl mx-auto px-4 py-8"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <h2 className="text-3xl font-bold text-center text-blue-600 mb-10">
+        My Gym Attendance
+      </h2>
 
-      <div className="mb-8 text-center">
+      <motion.div
+        className="mb-10 text-center"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.2 }}
+      >
         <h2 className="text-xl font-semibold mb-2">Mark Today's Attendance</h2>
-        <div className="flex justify-center">
+        <div className="flex flex-col sm:flex-row justify-center gap-4 mt-2">
           <button
             onClick={() => handleMarkAttendance(true)}
-            className="bg-green-500 text-white px-4 py-2 rounded mr-4"
+            className="bg-green-500 hover:bg-green-600 transition text-white px-6 py-2 rounded"
           >
             Mark Attended
           </button>
           <button
             onClick={() => handleMarkAttendance(false)}
-            className="bg-red-500 text-white px-4 py-2 rounded"
+            className="bg-red-500 hover:bg-red-600 transition text-white px-6 py-2 rounded"
           >
             Mark Absent
           </button>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="mb-8 text-center">
-        <h2 className="text-xl font-semibold mb-4">Attendance Calendar</h2>
+      <motion.div
+        className="mb-10"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
+        <h2 className="text-xl font-semibold text-center mb-4">Attendance Calendar</h2>
         <div className="flex justify-center">
-          <Calendar
-            tileClassName={getTileClassName} // Use the function to get tile class for attended dates
-          />
+          <Calendar tileClassName={getTileClassName} className="react-calendar border-none shadow-md rounded-lg p-4" />
         </div>
-      </div>
+      </motion.div>
 
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+      >
         <h2 className="text-xl font-semibold mb-4">Attendance History</h2>
-        <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="px-4 py-2 border-b">Date</th>
-              <th className="px-4 py-2 border-b">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {attendanceHistory.map((entry, index) => (
-              <tr key={index} className="hover:bg-gray-50">
-                <td className="px-4 py-2 border-b">{formatDate(entry.date)}</td>
-                <td className="px-4 py-2 border-b">{entry.attended ? "Present" : "Absent"}</td>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+            <thead>
+              <tr className="bg-gray-100 text-gray-700">
+                <th className="px-4 py-2 border-b">Date</th>
+                <th className="px-4 py-2 border-b">Status</th>
               </tr>
-            ))}
-          </tbody>
-            </table>
-      </div>
-    </div>
-    
+            </thead>
+            <tbody>
+              {attendanceHistory.map((entry, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-4 py-2 border-b">{formatDate(entry.date)}</td>
+                  <td className="px-4 py-2 border-b">
+                    {entry.attended ? (
+                      <span className="text-green-600 font-medium">Present</span>
+                    ) : (
+                      <span className="text-red-500 font-medium">Absent</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }
 

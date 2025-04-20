@@ -18,7 +18,7 @@ function Header() {
     { name: 'Dashboard', url: '/trainer', active: role === 'trainer' },
     { name: 'Gyms', url: '/gym_card', active: role !== 'admin' },
     { name: 'About', url: '/about', active: role !== 'admin' },
-    { name: 'Pricing Plan', url: '/pricing', active: role === 'user' },
+    
     { name: 'Contact', url: '/contact', active: role !== 'admin'},
     { name: 'Admin', url: '/admin', active: role === 'admin' },
     
@@ -26,14 +26,14 @@ function Header() {
   ];
 
   return (
-    <header className='bg-white shadow-md'>
+    <header className='bg-gray-800 shadow-md'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center'>
         {/* Logo */}
         <div
           onClick={() => navigate('/')}
           className='text-red-600 font-bold text-xl cursor-pointer tracking-wide'
         >
-           GYM Management System
+           GYM_X
         </div>
 
         {/* Desktop Menu */}
@@ -43,7 +43,7 @@ function Header() {
               <li key={item.name}>
                 <button
                   onClick={() => navigate(item.url)}
-                  className={`text-md font-medium transition duration-200 ${
+                  className={` text-white text-md font-medium transition duration-200 ${
                     location.pathname === item.url
                       ? 'text-black underline underline-offset-4'
                       : 'text-gray-700 hover:text-red-600'
@@ -62,14 +62,14 @@ function Header() {
         </ul>
 
         {/* Mobile Menu Icon */}
-        <button onClick={() => setMenuOpen(!menuOpen)} className='md:hidden text-gray-800'>
+        <button onClick={() => setMenuOpen(!menuOpen)} className='md:hidden text-white'>
           <Menu size={26} />
         </button>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {menuOpen && (
-        <div className='md:hidden bg-white px-4 pb-4 shadow-md'>
+        <div className='md:hidden bg-gray-800 px-4 pb-4 shadow-md'>
           <ul className='flex flex-col gap-4'>
             {navItems.map((item) =>
               item.active ? (
@@ -79,7 +79,7 @@ function Header() {
                       navigate(item.url);
                       setMenuOpen(false);
                     }}
-                    className={`text-md font-medium block w-full text-left ${
+                    className={`text-md text-white font-medium block w-full text-left ${
                       location.pathname === item.url
                         ? 'text-black underline underline-offset-4'
                         : 'text-gray-700 hover:text-red-600'

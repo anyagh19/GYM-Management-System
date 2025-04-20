@@ -15,43 +15,71 @@ export class AuthService {
         this.database = new Databases(this.client)
     }
 
-    async createAccount({ adminID = ID.unique(), adminEmail, adminPassword, adminName, role , gymName , gymID= ID.unique(), gymAddress, gymDescription, gymImages }) {
+    async createAccount(payload) {
         try {
-        const userAccount = await this.account.create(adminID , adminEmail , adminPassword , adminName);
-
-        gymDocId= ID.unique()
+            const role = payload.role || 'member';
+            let userAccount;
+            let userID = ID.unique();
+            let docID = ID.unique();
     
-            await this.database.createDocument(
-                conf.appwriteDatabaseID,
-                conf.appwriteAdminsCollectionID,
-                gymDocId,
-                {
-                    adminID,
+            if (role === 'admin') {
+                const {
                     adminEmail,
-                    adminName,
                     adminPassword,
-                    role,
+                    adminName,
                     gymName,
-                    gymID,
                     gymAddress,
                     gymDescription,
-                    gymImages
-                }
-            )
-            if (userAccount) {
-                await this.login({ email: adminEmail, password: adminPassword })
-                localStorage.setItem("gymDocId", gymDocId)
-                await this.account.updatePrefs({ role });
-                return userAccount;
+                    gymImages = ''
+                } = payload;
+    
+                userAccount = await this.account.create(userID, adminEmail, adminPassword, adminName);
+    
+                await this.database.createDocument(
+                    conf.appwriteDatabaseID,
+                    conf.appwriteAdminsCollectionID,
+                    docID,
+                    {
+                        adminID: userID,
+                        adminEmail,
+                        adminName,
+                        adminPassword,
+                        role,
+                        gymName,
+                        gymID: ID.unique(),
+                        gymAddress,
+                        gymDescription,
+                        gymImages
+                    }
+                );
+    
+                await this.login({ email: adminEmail, password: adminPassword });
             }
-            else {
-                return userAccount;
+    
+            else if (role === 'member') {
+                const {
+                    email,
+                    password,
+                    name,
+                    phone,
+                    address
+                } = payload;
+    
+                userAccount = await this.account.create(userID, email, password, name);
+    
+                
+    
+                await this.login({ email, password });
             }
+    
+            await this.account.updatePrefs({ role });
+            return userAccount;
         } catch (error) {
-            console.error("Error creating account: ", error)
-            throw error
+            console.error("Error creating account: ", error);
+            throw error;
         }
     }
+    
 
     async login({ email, password }) {
         try {

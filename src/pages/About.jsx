@@ -1,42 +1,56 @@
-import React from 'react'
+import React from 'react';
+import { motion } from 'framer-motion';
 
 function About() {
-    return (
-        <div className="p-6 md:p-12 max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold mb-6">About</h1>
-    
-          <p className="mb-6 text-gray-800">
-            Welcome to <strong>Captain Gym</strong>, your ultimate destination for fitness, strength, and transformation. 
-            Our mission is to empower individuals to lead healthier lives through innovation, motivation, and expert guidance.
-          </p>
-    
-          <p className="mb-6 text-gray-800">
-            Captain Gym is powered by a smart, automated system designed to streamline all aspects of gym operations and enhance 
-            your fitness journey. From easy online membership registration and customized workout tracking to real-time class 
-            schedules and secure billing, we use technology to bring convenience and performance to the forefront.
-          </p>
-    
-          <div className="mb-6">
-            <p className="font-semibold mb-2">Our system enables:</p>
-            <ul className="list-disc list-inside space-y-2 text-gray-800">
-              <li>Hassle-free online sign-ups and membership renewals</li>
-              <li>Personalized health tracking and BMI-based training plans</li>
-              <li>Secure billing and payments</li>
-              <li>Efficient class and trainer scheduling</li>
-            </ul>
-          </div>
-    
-          <p className="mb-6 text-gray-800">
-            Driven by a passion for fitness and innovation, Captain Gym is more than just a workout space – it’s a community 
-            where your progress is our priority. We continue to evolve by integrating modern technologies like AI-driven personal 
-            coaching and health tech integrations for wearables.
-          </p>
-    
-          <p className="text-gray-800">
-            Join Captain Gym and take command of your fitness goals with a system built to support, motivate, and inspire you every step of the way.
-          </p>
-        </div>
-  )
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="px-4 py-10 md:px-12 max-w-5xl mx-auto"
+    >
+      <h1 className="text-4xl md:text-5xl font-bold text-center text-[#007b55] mb-8">
+        About GYM_X
+      </h1>
+
+      <p className="mb-6 text-gray-700 text-lg leading-relaxed">
+        <strong>Gym_X</strong> is a smart, centralized platform created to connect gyms and fitness seekers on one unified hub. 
+        Whether you're a gym owner looking to manage operations efficiently or a fitness enthusiast exploring membership plans — 
+        we’ve got you covered.
+      </p>
+
+      <p className="mb-6 text-gray-700 text-lg leading-relaxed">
+        Our system empowers <span className="font-semibold">gyms to register</span>, showcase their facilities, 
+        and publish membership plans, while allowing <span className="font-semibold">members to browse gyms</span>, 
+        track their health progress, and subscribe to customized plans — all through an intuitive and seamless experience.
+      </p>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+        className="mb-6 bg-white shadow-md rounded-xl p-6"
+      >
+        <h2 className="text-xl font-semibold text-[#007b55] mb-4">What Our Platform Offers:</h2>
+        <ul className="list-disc list-inside space-y-3 text-gray-800 text-base">
+          <li>📱 Centralized gym discovery and comparison</li>
+          <li>🔐 Secure online sign-ups, payments, and renewals</li>
+          <li>📊 Personalized dashboards for gym members</li>
+          <li>📅 Real-time schedule, trainer, and plan management</li>
+          <li>💪 AI-based workout & BMI tracking features (coming soon)</li>
+        </ul>
+      </motion.div>
+
+      <p className="mb-6 text-gray-700 text-lg leading-relaxed">
+        We are committed to transforming the fitness experience with cutting-edge technology, seamless automation, and a community-first approach.
+      </p>
+
+      <p className="text-gray-700 text-lg leading-relaxed">
+        Join <strong>Captain Gym</strong> and take charge of your fitness journey or grow your fitness business with tools built 
+        for success. 🚀
+      </p>
+    </motion.div>
+  );
 }
 
-export default About
+export default About;
