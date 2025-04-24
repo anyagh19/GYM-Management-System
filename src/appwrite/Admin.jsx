@@ -249,7 +249,7 @@ export class AdminService {
 
     async listFeedTrainer(){
         try {
-            return this.database.listDocuments(
+            return await this.database.listDocuments(
                 conf.appwriteDatabaseID,
                 conf.appwriteTrainerRatingCollectionID,
             )
@@ -260,9 +260,20 @@ export class AdminService {
 
     async listFeedGym(){
         try {
-            return this.database.listDocuments(
+            return await this.database.listDocuments(
                 conf.appwriteDatabaseID,
                 conf.appwriteGymRatingCollectionID
+            )
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async listTrainers(){
+        try {
+            return await this.database.listDocuments(
+                conf.appwriteDatabaseID,
+                conf.appwriteTrainersCollectionID,
             )
         } catch (error) {
             console.log(error)

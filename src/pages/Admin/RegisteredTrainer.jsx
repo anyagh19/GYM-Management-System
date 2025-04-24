@@ -18,7 +18,7 @@ function RegisteredTrainer() {
 
         if (!gymID) return console.error("Gym not found for admin.");
 
-        const res = await adminService.listGymTrainers(gymID);
+        const res = await adminService.listTrainers();
         setTrainers(res.documents || []);
       } catch (error) {
         console.error("Error fetching trainers: ", error);
