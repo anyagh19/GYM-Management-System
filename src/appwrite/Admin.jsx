@@ -13,7 +13,7 @@ export class AdminService {
         this.database = new Databases(this.client)
     }
 
-    async createPlan({ title, description, price, duration , planID= ID.unique(), gymID }){
+    async createPlan({ title, description, price, duration , planID= ID.unique() }){
         try {
             return await this.database.createDocument(
                 conf.appwriteDatabaseID,
@@ -25,7 +25,7 @@ export class AdminService {
                     price: parseInt(price),
                     duration,
                     planID,
-                    gymID
+                   
                 },
                 // [
                 //     Permissions.read([Role.any()]),
@@ -164,18 +164,32 @@ export class AdminService {
         }
     }
 
-    async listGymTrainers(gymID) {
+    async listGymTrainers() {
         try {
             return await this.database.listDocuments(
                 conf.appwriteDatabaseID,
                 conf.appwriterGymTrainerCollectionID,
-                [Query.equal("gymID", gymID)]
+                
             )
         } catch (error) {
             console.error("Error listing gym trainers: ", error)
             throw error
         }
     }
+
+    async deleteTrainer(documentId){
+        try {
+            return this.database.deleteDocument(
+                conf.appwriteDatabaseID,
+                conf.appwriterGymTrainerCollectionID,
+                documentId
+            );
+        } catch (error) {
+            console.error("Error deleting trainer: ", error);
+            throw error;
+        }
+    }
+    
     async assignTrainerToMember({ assignID = ID.unique(),  gymID,userID, trainerID, }) {
         try {
             return await this.database.createDocument(
@@ -195,6 +209,20 @@ export class AdminService {
             throw error;
         }
     }
+
+    async deleteAssignTrainer(userID){
+        try {
+            return this.database.deleteDocument(
+                conf.appwriteDatabaseID,
+                conf.appwriteAssignTrainerCollectionID,
+                [
+                    Query.equal('userID', userID)
+                ]
+            )
+        } catch (error) {
+            console.log(error)
+        }
+    }
     
     async bookinHistoryOfGym(gymID) {
         try {
@@ -205,6 +233,39 @@ export class AdminService {
             )
         } catch (error) {
             console.error("Error listing booking history: ", error)
+        }
+    }
+
+    async listAllPlan(){
+        try {
+            return this.database.listDocuments(
+                conf.appwriteDatabaseID,
+                conf.appwriteMembershipPlanCollectionID
+            )
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async listFeedTrainer(){
+        try {
+            return this.database.listDocuments(
+                conf.appwriteDatabaseID,
+                conf.appwriteTrainerRatingCollectionID,
+            )
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async listFeedGym(){
+        try {
+            return this.database.listDocuments(
+                conf.appwriteDatabaseID,
+                conf.appwriteGymRatingCollectionID
+            )
+        } catch (error) {
+            console.log(error)
         }
     }
 }

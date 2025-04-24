@@ -4,7 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import HomePage from './pages/HomePage.jsx'
-import { About, AdminDash, ApplicationsForTrainer, AssignTrainer, AttendancePage, BookingHistory, ContactPage, DietPage, EditPlan, GymCardPage, GymPage, GymPlans, LogIn, Packages, PlanForm, PlansPage, RegisteredTrainer, RegisteredUser, SetDietPlan, SetWorkoutPlan, SignUp, TrainerApplicationForm, TrainerDash, UserDash, WorkoutPage } from '../Index.js'
+import { About, AdminDash, ApplicationsForTrainer, AssignTrainer, AttendancePage, BookingHistory, ContactPage, DietPage, EditPlan, Feedback, GymCardPage, GymPage, GymPlans, LogIn, Packages, PlanForm, PlansPage, RegisteredTrainer, RegisteredUser, SetDietPlan, SetWorkoutPlan, SignUp, TrainerApplicationForm, TrainerDash, UserDash, WorkoutPage } from '../Index.js'
 import { Provider } from 'react-redux'
 import store from './store/Store.js'
 
@@ -116,6 +116,10 @@ const router = createBrowserRouter([
       {
         path: '/booking_history',
         element: <BookingHistory />
+      },
+      {
+        path: '/feedback',
+        element: <Feedback />
       }
     ]
   }

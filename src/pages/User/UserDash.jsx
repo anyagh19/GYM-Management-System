@@ -43,7 +43,7 @@ function UserDash() {
   }, [userData]);
 
   const handleTrainerRatingSubmit = async () => {
-    if (!rating) return setMessage("Trainer rating is required!");
+    if (!rating) return setMessage("Trainer feedback is required!");
 
     try {
       const trainerInfo = await trainerService.getTrainerIdFromUserID(userData.$id);
@@ -53,11 +53,11 @@ function UserDash() {
       await memberService.rateTrainer({
         trainerID: trainerInfo.trainerID,
         userID: userData.$id,
-        rating: rating.toString(),
         feedback,
+        name: userData.name
       });
 
-      setMessage("✅ Rating submitted successfully!");
+      setMessage("✅  submitted successfully!");
       setRating(5);
       setFeedback('');
     } catch (error) {
@@ -76,15 +76,15 @@ function UserDash() {
       await memberService.rateGym({
         gymID: gym.gymID,
         userID: userData.$id,
-        rating: gymRating,
         feedback: gymFeedback,
+        name: userData.name
       });
 
-      setGymMessage("✅ Gym rating submitted successfully!");
+      setGymMessage("✅  submitted successfully!");
       setGymRating(5);
       setGymFeedback('');
     } catch (error) {
-      setGymMessage("❌ Failed to submit gym rating.");
+      setGymMessage("❌ Failed to submit ");
     }
   };
 
@@ -149,13 +149,13 @@ function UserDash() {
           onClick={toggleTrainerRatingSection}
           className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300"
         >
-          {showTrainerRatingForm ? "Hide Trainer Rating" : "Rate Trainer"}
+          {showTrainerRatingForm ? "Hide " : "feedback Trainer"}
         </button>
         <button
           onClick={toggleGymRatingSection}
           className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300"
         >
-          {showGymRatingForm ? "Hide Gym Rating" : "Rate Gym"}
+          {showGymRatingForm ? "Hide" : "feedback gym"}
         </button>
       </div>
 
@@ -172,14 +172,7 @@ function UserDash() {
             <h3 className="text-2xl font-semibold text-center mb-4">Trainer Rating</h3>
             {message && <p className="text-center text-blue-600 mb-4">{message}</p>}
 
-            <input
-              type="number"
-              min="1"
-              max="5"
-              value={rating}
-              onChange={(e) => setRating(Number(e.target.value))}
-              className="w-full border p-2 mb-4 rounded-md"
-            />
+            
             <textarea
               placeholder="Feedback (optional)"
               value={feedback}
@@ -190,7 +183,7 @@ function UserDash() {
               onClick={handleTrainerRatingSubmit}
               className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
             >
-              Submit Trainer Rating
+              Submit 
             </button>
           </motion.div>
         )}
@@ -209,14 +202,7 @@ function UserDash() {
             <h3 className="text-2xl font-semibold text-center mb-4">Gym Rating</h3>
             {gymMessage && <p className="text-center text-blue-600 mb-4">{gymMessage}</p>}
 
-            <input
-              type="number"
-              min="1"
-              max="5"
-              value={gymRating}
-              onChange={(e) => setGymRating(Number(e.target.value))}
-              className="w-full border p-2 mb-4 rounded-md"
-            />
+            
             <textarea
               placeholder="Feedback (optional)"
               value={gymFeedback}
@@ -227,7 +213,7 @@ function UserDash() {
               onClick={handleGymRatingSubmit}
               className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
             >
-              Submit Gym Rating
+              Submit
             </button>
           </motion.div>
         )}

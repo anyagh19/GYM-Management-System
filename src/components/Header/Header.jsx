@@ -16,7 +16,9 @@ function Header() {
     { name: 'Home', url: '/', active: role !== 'admin' && role !== 'user'},
     { name: 'Dashboard', url: '/member', active: role === 'user' },
     { name: 'Dashboard', url: '/trainer', active: role === 'trainer' },
-    { name: 'Gyms', url: '/gym_card', active: role !== 'admin' },
+    //{ name: 'Gyms', url: '/gym_card', active: role !== 'admin' },
+    { name: 'Pricing', url: '/pricing', active: role === 'user' },
+    
     { name: 'About', url: '/about', active: role !== 'admin' },
     
     { name: 'Contact', url: '/contact', active: role !== 'admin'},

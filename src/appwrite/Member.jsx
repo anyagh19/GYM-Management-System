@@ -13,7 +13,7 @@ export class MemberService {
         this.database = new Databases(this.client)
     }
 
-    async createMember({ userName, userEmail,userPassword,  userPhone,  userID= ID.unique(), userAddress ,planID, title, registrationDate , expiryDate , gymID }){
+    async createMember({ userName, userEmail,userPassword,  userPhone,  userID= ID.unique(), userAddress ,planID, title, registrationDate , expiryDate  }){
         try {
             const res = await this.database.createDocument(
                 conf.appwriteDatabaseID,
@@ -30,7 +30,7 @@ export class MemberService {
                     userID,
                     planID,
                     title, 
-                    gymID
+                   
                 }
             );
             return res;
@@ -190,7 +190,7 @@ export class MemberService {
         }
       }
 
-      async rateTrainer({trainerRateID = ID.unique() , trainerID , userID , rating , feedback}){
+      async rateTrainer({trainerRateID = ID.unique() , trainerID , userID , rating , feedback , name}){
         try {
             return await this.database.createDocument(
                 conf.appwriteDatabaseID,
@@ -201,7 +201,8 @@ export class MemberService {
                     trainerID , 
                     userID,
                     rating,
-                    feedback
+                    feedback, 
+                    name
                 }
             )
         } catch (error) {
@@ -235,7 +236,7 @@ export class MemberService {
             console.log('get trainer rating error' , error)
         }
       }
-      async rateGym({gymRateID = ID.unique() , gymID , userID , rating , feedback}){
+      async rateGym({gymRateID = ID.unique() , gymID , userID , rating , feedback, name}){
         try {
             return await this.database.createDocument(
                 conf.appwriteDatabaseID,
@@ -246,7 +247,8 @@ export class MemberService {
                     gymID , 
                     userID,
                     rating,
-                    feedback
+                    feedback,
+                    name
                 }
             )
         } catch (error) {

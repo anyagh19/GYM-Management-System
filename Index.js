@@ -33,6 +33,7 @@ import SetWorkoutPlan from "./src/pages/Trainer/SetWorkoutPlan";
 import Card from "./src/components/Card";
 import DietPage from "./src/pages/User/DietPage";
 import BookingHistory from "./src/pages/Admin/BookingHistory";
+import Feedback from "./src/pages/Admin/Feedback";
 
 export{
     Header,
@@ -69,5 +70,6 @@ export{
     SetWorkoutPlan,
     Card,
     DietPage,
-    BookingHistory
+    BookingHistory,
+    Feedback
 }

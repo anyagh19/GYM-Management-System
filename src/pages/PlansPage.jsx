@@ -15,14 +15,10 @@ function PlansPage() {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const gymID = userData?.gymID; // make sure gymID is available
+       
+        
   
-        if (!gymID) {
-          console.error("❌ Gym ID is missing.");
-          return;
-        }
-  
-        const response = await adminService.listPlans(gymID);
+        const response = await adminService.listAllPlan();
         if (response?.documents) {
           setPlans(response.documents);
         }

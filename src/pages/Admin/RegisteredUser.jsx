@@ -33,6 +33,7 @@ function RegisteredUser() {
   const handleDeleteUser = async (userID) => {
     try {
       await memberService.deleteMember(userID);
+      await adminService.deleteAssignTrainer(userID)
       setUsers(users.filter(user => user.$id !== userID));
       alert("User deleted successfully!");
     } catch (error) {

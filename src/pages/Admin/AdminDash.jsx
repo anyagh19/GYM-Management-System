@@ -9,6 +9,7 @@ const data = [
     { title: "Total Packages", url:'/total_packages' ,   color: "bg-red-600" },
     
     { title: "Booking History",url:'/booking_history' , color: "bg-green-500" },
+    { title: "Feedback and Reports",url:'/feedback' , color: "bg-green-500" },
     // { title: "Partial Payment Booking", count: 0, color: "bg-yellow-500" },
     // { title: "Full Payment Booking", count: 0, color: "bg-red-700" },
   ];
@@ -41,6 +42,11 @@ const AdminDash = () => {
           <li>
             <Link to='/booking_history'>
             Booking History
+            </Link>
+          </li>
+          <li>
+            <Link to='/feedback'>
+            feedback & reports
             </Link>
           </li>
         </ul>

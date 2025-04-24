@@ -30,7 +30,7 @@ function RegisteredTrainer() {
 
   const handleDelete = async (trainerId) => {
     try {
-      await adminService.deleteGymTrainer(trainerId);
+      await adminService.deleteTrainer(trainerId);
       setTrainers(prev => prev.filter(trainer => trainer.$id !== trainerId));
       alert("Trainer deleted successfully.");
     } catch (error) {
