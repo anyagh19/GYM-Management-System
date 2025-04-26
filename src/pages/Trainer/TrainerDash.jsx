@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import authService from '../../appwrite/Auth';
 import memberService from '../../appwrite/Member';
 import trainerService from '../../appwrite/Trainer';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 function TrainerDash() {
@@ -65,7 +65,11 @@ function TrainerDash() {
         transition={{ duration: 0.5 }}
       >
         Trainer Dashboard
+          
       </motion.h1>
+      <Link to="/attendance">
+          <h2 className='text-end mb-2'>Attendence</h2>
+          </Link>
 
       {/* Desktop Table */}
       <div className="hidden md:block overflow-x-auto rounded-lg shadow-lg bg-white">

@@ -6,50 +6,53 @@ import "react-calendar/dist/Calendar.css";
 import { motion } from "framer-motion";
 
 function AttendancePage() {
-  const [attendance, setAttendance] = useState(null);
   const [attendanceHistory, setAttendanceHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const userData = useSelector((state) => state.auth.userData);
 
   useEffect(() => {
-    if (userData) {
-      const fetchAttendanceHistory = async () => {
-        try {
-          const history = await attendanceService.getAttendanceHistory(userData.$id);
-          setAttendanceHistory(history);
-        } catch (err) {
-          console.error("Error fetching attendance history:", err);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchAttendanceHistory();
-    } else {
+    if (!userData) {
       setLoading(false);
+      return;
     }
+
+    const fetchAttendance = async () => {
+      try {
+        const userAttendance = await attendanceService.getAttendanceHistory(userData.$id);
+
+        if (userAttendance && Array.isArray(userAttendance.documents)) {
+          setAttendanceHistory(userAttendance.documents);
+        } else if (Array.isArray(userAttendance)) {
+          setAttendanceHistory(userAttendance);
+        } else {
+          setAttendanceHistory([]);
+        }
+      } catch (err) {
+        console.error("Error fetching attendance:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAttendance();
   }, [userData]);
 
   const handleMarkAttendance = async (attended) => {
     if (!userData) return;
     try {
-      await attendanceService.markAttendance(userData.$id, attended);
-      setAttendance(attended);
+      await attendanceService.markAttendance(userData.$id, attended, userData.prefs.role , userData.name); // fixed here
       const updatedHistory = await attendanceService.getAttendanceHistory(userData.$id);
-      setAttendanceHistory(updatedHistory);
+
+      if (updatedHistory && Array.isArray(updatedHistory.documents)) {
+        setAttendanceHistory(updatedHistory.documents);
+      } else if (Array.isArray(updatedHistory)) {
+        setAttendanceHistory(updatedHistory);
+      } else {
+        setAttendanceHistory([]);
+      }
     } catch (err) {
       console.error("Error marking attendance:", err);
     }
-  };
-
-  const getTileClassName = ({ date, view }) => {
-    if (view === "month") {
-      const iso = date.toISOString().split("T")[0];
-      const entry = attendanceHistory.find((e) => e.date === iso);
-      if (entry && entry.attended) {
-        return "present-day";
-      }
-    }
-    return null;
   };
 
   const formatDate = (date) => {
@@ -75,53 +78,48 @@ function AttendancePage() {
         My Gym Attendance
       </h2>
 
-      <motion.div
-        className="mb-10 text-center"
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.2 }}
-      >
-        <h2 className="text-xl font-semibold mb-2">Mark Today's Attendance</h2>
-        <div className="flex flex-col sm:flex-row justify-center gap-4 mt-2">
-          <button
-            onClick={() => handleMarkAttendance(true)}
-            className="bg-green-500 hover:bg-green-600 transition text-white px-6 py-2 rounded"
-          >
-            Mark Attended
-          </button>
-          <button
-            onClick={() => handleMarkAttendance(false)}
-            className="bg-red-500 hover:bg-red-600 transition text-white px-6 py-2 rounded"
-          >
-            Mark Absent
-          </button>
-        </div>
-      </motion.div>
-
-      <motion.div
-        className="mb-10"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
-        <h2 className="text-xl font-semibold text-center mb-4">Attendance Calendar</h2>
-        <div className="flex justify-center">
-          <Calendar tileClassName={getTileClassName} className="react-calendar border-none shadow-md rounded-lg p-4" />
-        </div>
-      </motion.div>
+      {userData.prefs.role !== "admin" && (
+        <motion.div
+          className="mb-10 text-center"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <h2 className="text-xl font-semibold mb-2">Mark Today's Attendance</h2>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-2">
+            <button
+              onClick={() => handleMarkAttendance(true)}
+              className="bg-green-500 hover:bg-green-600 transition text-white px-6 py-2 rounded"
+            >
+              Mark Attended
+            </button>
+            <button
+              onClick={() => handleMarkAttendance(false)}
+              className="bg-red-500 hover:bg-red-600 transition text-white px-6 py-2 rounded"
+            >
+              Mark Absent
+            </button>
+          </div>
+        </motion.div>
+      )}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
       >
-        <h2 className="text-xl font-semibold mb-4">Attendance History</h2>
+        <h2 className="text-xl font-semibold mb-4">
+          Attendance History
+        </h2>
+
+        {/* Normal user: Show their own history */}
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
             <thead>
               <tr className="bg-gray-100 text-gray-700">
                 <th className="px-4 py-2 border-b">Date</th>
                 <th className="px-4 py-2 border-b">Status</th>
+                <th className="px-4 py-2 border-b">Role</th> {/* NEW COLUMN */}
               </tr>
             </thead>
             <tbody>
@@ -135,6 +133,7 @@ function AttendancePage() {
                       <span className="text-red-500 font-medium">Absent</span>
                     )}
                   </td>
+                  <td className="px-4 py-2 border-b capitalize">{entry.role || "user"}</td> {/* show role */}
                 </tr>
               ))}
             </tbody>

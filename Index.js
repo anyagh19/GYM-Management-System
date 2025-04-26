@@ -34,6 +34,7 @@ import Card from "./src/components/Card";
 import DietPage from "./src/pages/User/DietPage";
 import BookingHistory from "./src/pages/Admin/BookingHistory";
 import Feedback from "./src/pages/Admin/Feedback";
+import AtendenceHistory from "./src/pages/Admin/AtendenceHistory";
 
 export{
     Header,
@@ -71,5 +72,6 @@ export{
     Card,
     DietPage,
     BookingHistory,
-    Feedback
+    Feedback,
+    AtendenceHistory
 }

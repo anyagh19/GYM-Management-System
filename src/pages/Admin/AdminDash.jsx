@@ -10,6 +10,7 @@ const data = [
     
     { title: "Booking History",url:'/booking_history' , color: "bg-green-500" },
     { title: "Feedback and Reports",url:'/feedback' , color: "bg-green-500" },
+    { title: "Attendence History",url:'/atendence-history',  color: "bg-blue-600" },
     // { title: "Partial Payment Booking", count: 0, color: "bg-yellow-500" },
     // { title: "Full Payment Booking", count: 0, color: "bg-red-700" },
   ];
