@@ -40,7 +40,7 @@ function AttendancePage() {
   const handleMarkAttendance = async (attended) => {
     if (!userData) return;
     try {
-      await attendanceService.markAttendance(userData.$id, attended, userData.prefs.role , userData.name); // fixed here
+      await attendanceService.markAttendance(userData.$id, attended, userData.prefs.role, userData.name);
       const updatedHistory = await attendanceService.getAttendanceHistory(userData.$id);
 
       if (updatedHistory && Array.isArray(updatedHistory.documents)) {
@@ -103,6 +103,34 @@ function AttendancePage() {
         </motion.div>
       )}
 
+<motion.div
+        className="mt-10"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+      >
+        <h2 className="text-xl font-semibold mb-4 text-center">Attendance Calendar</h2>
+        <div className="flex justify-center">
+          <Calendar
+            tileClassName={({ date, view }) => {
+              if (view === 'month') {
+                const formattedDate = date.toISOString().split('T')[0];
+
+                const entry = attendanceHistory.find((e) => {
+                  const entryDate = new Date(e.date).toISOString().split('T')[0];
+                  return entryDate === formattedDate;
+                });
+
+                if (entry) {
+                  return entry.attended ? 'present-day' : 'absent-day';
+                }
+              }
+              return null;
+            }}
+          />
+        </div>
+      </motion.div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -112,14 +140,13 @@ function AttendancePage() {
           Attendance History
         </h2>
 
-        {/* Normal user: Show their own history */}
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
             <thead>
               <tr className="bg-gray-100 text-gray-700">
                 <th className="px-4 py-2 border-b">Date</th>
                 <th className="px-4 py-2 border-b">Status</th>
-                <th className="px-4 py-2 border-b">Role</th> {/* NEW COLUMN */}
+                <th className="px-4 py-2 border-b">Role</th>
               </tr>
             </thead>
             <tbody>
@@ -133,13 +160,17 @@ function AttendancePage() {
                       <span className="text-red-500 font-medium">Absent</span>
                     )}
                   </td>
-                  <td className="px-4 py-2 border-b capitalize">{entry.role || "user"}</td> {/* show role */}
+                  <td className="px-4 py-2 border-b capitalize">{entry.role || "user"}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </motion.div>
+
+      {/* Calendar Section */}
+     
+
     </motion.div>
   );
 }

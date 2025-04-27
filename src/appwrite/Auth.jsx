@@ -95,13 +95,20 @@ export class AuthService {
 
     async getCurrentUser() {
         try {
-            const user = await this.account.get()
-            return user
+          const user = await this.account.get();
+          return {
+            id: user.$id,
+            name: user.name,
+            email: user.email,
+            role: user.prefs?.role || 'member',
+            ...user
+          };
         } catch (error) {
-            console.error("Error getting current user: ", error)
-            throw error
+          console.error("Error getting current user: ", error);
+          throw error;
         }
-    }
+      }
+      
 
     async logOut() {
         try {

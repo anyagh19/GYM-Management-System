@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 const data = [
     { title: "registeres User",url:'/registered_user',  color: "bg-blue-600" },
     { title: "Trainers",url:'/registered_trainer', color: "bg-green-600" },
-    //{ title: " Trainer Applications",url:'/applications_for_trainer',  color: "bg-blue-400" },
+    { title: " Trainer Applications",url:'/applications_for_trainer',  color: "bg-blue-400" },
     { title: "Total Packages", url:'/total_packages' ,   color: "bg-red-600" },
     
     { title: "Booking History",url:'/booking_history' , color: "bg-green-500" },
@@ -48,6 +48,11 @@ const AdminDash = () => {
           <li>
             <Link to='/feedback'>
             feedback & reports
+            </Link>
+          </li>
+          <li>
+            <Link to='/atendence-history'>
+            Attendence History
             </Link>
           </li>
         </ul>

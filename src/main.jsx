@@ -82,7 +82,7 @@ const router = createBrowserRouter([
         element: <GymPage />
       },
       {
-        path: '/trainer_application/:gymId',
+        path: '/trainer_application',
         element: <TrainerApplicationForm />
       },
       {

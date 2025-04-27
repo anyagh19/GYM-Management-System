@@ -42,12 +42,14 @@ function SignUp() {
       }
 
       if (selectedRole === 'trainer') {
-        userData = await trainerService.createTrainer({
-          trainerID: ID.unique(),
+        userData = await trainerService.createTrainerApplication({
           name: data.name,
           email: data.email,
-          password: data.password,
           phone: data.phone,
+          password: data.password,
+          qualification: data.qualification,
+          experience: data.experience,
+          specialization: data.specialization,
           address: data.address,
           gender: data.gender,
           role: selectedRole
@@ -67,8 +69,16 @@ function SignUp() {
       }
 
       if (userData) {
-        const currentUserData = await authService.getCurrentUser(userData);
-        dispatch(login({ userData: currentUserData }));
+        const currentUserData = await authService.getCurrentUser();
+        dispatch(login({
+          userData: {
+            ...currentUserData,
+            role: currentUserData.prefs.role || 'member',
+          },
+          role: currentUserData.prefs.role || 'member'   // <--- THIS was missing!
+        }));
+        
+
         toast.success('🎉 Signup successful!', { position: 'top-center' });
 
         if (selectedRole === 'admin') navigate('/admin');
@@ -80,7 +90,7 @@ function SignUp() {
       toast.error('❌ Signup failed. Try again.', { position: 'top-center' });
     }
   };
-  
+
 
   return (
     <div className="w-full min-h-screen bg-cover bg-center flex justify-center items-center p-6" style={{ backgroundImage: "url('https://i.pinimg.com/474x/05/31/d7/0531d71e81f5a24dc74889d6c01b6523.jpg')" }}>
@@ -110,9 +120,12 @@ function SignUp() {
                   <Input type="email" placeholder="Email" {...register('email', { required: true })} />
                   <Input type="password" placeholder="Password" {...register('password', { required: true })} />
                   <Input type="text" placeholder="Full Name" {...register('name', { required: true })} />
-                  <Input type="text" placeholder="Address" {...register('address', { required: true })} />
+                  {/* <Input type="text" placeholder="Address" {...register('address', { required: true })} /> */}
                   <Input type="text" placeholder="Phone" {...register('phone', { required: true })} />
                   <Select label="Gender" options={['male', 'female', 'other']} {...register('gender', { required: true })} />
+                  <Input type="text" placeholder="Qualification" {...register('qualification', { required: true })} />
+                  <Input type="text" placeholder="Experiance" {...register('experience', { required: true })} />
+                  <Input type="text" placeholder="Specialization" {...register('specialization', { required: true })} />
                 </>
               )}
 

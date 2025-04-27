@@ -16,7 +16,7 @@ function BookingHistory() {
         const gym = gyms.documents.find(g => g.adminID === adminID);
         if (!gym?.gymID) return;
 
-        const response = await adminService.bookinHistoryOfGym(gym.gymID);
+        const response = await adminService.bookinHistoryOfGym();
         if (response?.documents) {
           setUsers(response.documents);
         }

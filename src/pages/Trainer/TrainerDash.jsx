@@ -8,12 +8,25 @@ import { motion } from 'framer-motion';
 function TrainerDash() {
   const [member, setMember] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [trainerExists, setTrainerExists] = useState(null); // new state
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMember = async () => {
       try {
         const userData = await authService.getCurrentUser();
+
+        // Check if trainer document exists first
+        const trainerDoc = await trainerService.getTrainerByUserID(userData.$id);
+
+        if (!trainerDoc) {
+          setTrainerExists(false); // Trainer not approved
+          return;
+        }
+
+        setTrainerExists(true); // Trainer exists
+
+        // Now continue fetching assigned members
         const res = await trainerService.listAssignedUsers(userData.$id);
         const assignedUsers = res.documents.filter(user => user.trainerID === userData.$id);
 
@@ -51,6 +64,34 @@ function TrainerDash() {
     navigate(`/set_workout_plan/${userID}`);
   };
 
+  // Loading screen
+  if (loading || trainerExists === null) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500 animate-pulse">Loading...</p>
+      </div>
+    );
+  }
+
+  // Trainer not approved
+  if (!trainerExists) {
+    return (
+      <motion.div
+        className="flex flex-col items-center justify-center min-h-screen text-center p-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        <h1 className="text-3xl font-bold text-pink-600 mb-4">Application Submitted 🎉</h1>
+        <p className="text-gray-600 text-lg max-w-md">
+          Thank you for applying! Your application has been submitted successfully.
+          Please wait for admin approval. We will notify you once you are approved.
+        </p>
+      </motion.div>
+    );
+  }
+
+  // Trainer dashboard
   return (
     <motion.div
       className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto"
@@ -65,11 +106,11 @@ function TrainerDash() {
         transition={{ duration: 0.5 }}
       >
         Trainer Dashboard
-          
       </motion.h1>
+
       <Link to="/attendance">
-          <h2 className='text-end mb-2'>Attendence</h2>
-          </Link>
+        <h2 className="text-end mb-2 text-blue-500 underline hover:text-blue-700">Attendance</h2>
+      </Link>
 
       {/* Desktop Table */}
       <div className="hidden md:block overflow-x-auto rounded-lg shadow-lg bg-white">

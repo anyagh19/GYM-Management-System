@@ -17,8 +17,8 @@ function ApplicationsForTrainer() {
         const gym = gyms.documents.find(g => g.adminID === accountID);
         if (!gym) return;
 
-        const originalGymID = gym.gymID;
-        const response = await adminService.listTrainerApplication(originalGymID);
+        
+        const response = await adminService.listTrainerApplication();
         setApplications(response?.documents || []);
       } catch (error) {
         console.error("Error fetching applications: ", error);
@@ -34,13 +34,15 @@ function ApplicationsForTrainer() {
       if (!selectedApp) return;
 
       await adminService.createGymTrainer({
-        gymTrainerID: ID.unique(),
-        gymID: selectedApp.gymID,
+       
+        
         trainerID: selectedApp.trainerID,
         name: selectedApp.name,
         email: selectedApp.email,
         phone: selectedApp.phone,
-        address: selectedApp.address,
+        qualification : selectedApp.qualification,
+        experience: selectedApp.experience,
+        specialization: selectedApp.specialization
       });
 
       await adminService.deleteTrainerApplication(applicationId);

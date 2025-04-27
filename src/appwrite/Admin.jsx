@@ -53,12 +53,12 @@ export class AdminService {
         }
     }
 
-    async listPlans(gymID) {
+    async listPlans() {
         try {
             return await this.database.listDocuments(
                 conf.appwriteDatabaseID,
                 conf.appwriteMembershipPlanCollectionID,
-                [Query.equal("gymID", gymID)]
+                
             )
         } catch (error) {
             console.error("Error listing plans: ", error)
@@ -117,12 +117,12 @@ export class AdminService {
         }
     }
 
-    async listTrainerApplication(gymID){
+    async listTrainerApplication(){
         try {
             return this.database.listDocuments(
                 conf.appwriteDatabaseID,
                 conf.appwriteTrainerApplicationsCollectionID,
-                [Query.equal("gymID", gymID)]
+               
             )
         } catch (error) {
             console.log('listing appli eroo' , error)
@@ -143,20 +143,22 @@ export class AdminService {
         }
     }
 
-    async createGymTrainer({gymTrainerID , gymID , trainerID, name, email, phone, address }){
+    async createGymTrainer({ trainerID, name, email, phone, qualification , specialization , experience }){
         try {
             return await this.database.createDocument(
                 conf.appwriteDatabaseID,
                 conf.appwriterGymTrainerCollectionID,
-                gymTrainerID,
+                ID.unique(),
                 {
-                    gymTrainerID,
-                    gymID,
+                    
+                    
                     trainerID,
                     name,
                     email,
                     phone,
-                    address
+                    qualification,
+                    specialization,
+                    experience
                 },
             )
         } catch (error) {
@@ -224,12 +226,12 @@ export class AdminService {
         }
     }
     
-    async bookinHistoryOfGym(gymID) {
+    async bookinHistoryOfGym() {
         try {
             return await this.database.listDocuments(
                 conf.appwriteDatabaseID,
                 conf.appwriteBookingHistoryCollectionID,
-                [Query.equal("gymID", gymID)]
+               
             )
         } catch (error) {
             console.error("Error listing booking history: ", error)
@@ -273,7 +275,7 @@ export class AdminService {
         try {
             return await this.database.listDocuments(
                 conf.appwriteDatabaseID,
-                conf.appwriteTrainersCollectionID,
+                conf.appwriterGymTrainerCollectionID,
             )
         } catch (error) {
             console.log(error)

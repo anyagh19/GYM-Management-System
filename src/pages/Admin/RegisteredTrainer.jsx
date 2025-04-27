@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 function RegisteredTrainer() {
   const [trainers, setTrainers] = useState([]);
 
+
   useEffect(() => {
     const fetchTrainers = async () => {
       try {
@@ -19,7 +20,11 @@ function RegisteredTrainer() {
         if (!gymID) return console.error("Gym not found for admin.");
 
         const res = await adminService.listTrainers();
-        setTrainers(res.documents || []);
+        if(res.documents && res.documents.length > 0)
+        {
+          setTrainers(res.documents || []);
+        }
+       
       } catch (error) {
         console.error("Error fetching trainers: ", error);
       }
@@ -60,7 +65,9 @@ function RegisteredTrainer() {
                     <th className="py-3 px-4">Name</th>
                     <th className="py-3 px-4">Email</th>
                     <th className="py-3 px-4">Phone</th>
-                    <th className="py-3 px-4">Address</th>
+                    <th className="py-3 px-4">Qualifications</th>
+                    <th className="py-3 px-4">Specialization</th>
+                    <th className="py-3 px-4">Experience</th>
                     <th className="py-3 px-4">Actions</th>
                   </tr>
                 </thead>
@@ -74,7 +81,9 @@ function RegisteredTrainer() {
                       <td className="py-2 px-4">{trainer.name}</td>
                       <td className="py-2 px-4">{trainer.email}</td>
                       <td className="py-2 px-4">{trainer.phone}</td>
-                      <td className="py-2 px-4">{trainer.address}</td>
+                      <td className="py-2 px-4">{trainer.qualification}</td>
+                      <td className="py-2 px-4">{trainer.specialization}</td>
+                      <td className="py-2 px-4">{trainer.experience}</td>
                       <td className="py-2 px-4">
                         <button
                           onClick={() => handleDelete(trainer.$id)}

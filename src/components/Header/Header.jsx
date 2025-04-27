@@ -13,11 +13,11 @@ function Header() {
   const role = useSelector((state) => state.auth.role); // 'admin', 'trainer', 'user'
 
   const navItems = [
-    { name: 'Home', url: '/', active: role !== 'admin' && role !== 'user'},
-    { name: 'Dashboard', url: '/member', active: role === 'user' },
+    { name: 'Home', url: '/', active: role !== 'admin' && role !== 'member'},
+    { name: 'Dashboard', url: '/member', active: role === 'member' },
     { name: 'Dashboard', url: '/trainer', active: role === 'trainer' },
     //{ name: 'Gyms', url: '/gym_card', active: role !== 'admin' },
-    { name: 'Pricing', url: '/pricing', active: role === 'user' },
+    { name: 'Pricing', url: '/pricing', active: role === 'member' },
     
     { name: 'About', url: '/about', active: role !== 'admin' },
     
