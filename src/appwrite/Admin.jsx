@@ -192,7 +192,7 @@ export class AdminService {
         }
     }
     
-    async assignTrainerToMember({ assignID = ID.unique(),  gymID,userID, trainerID, }) {
+    async assignTrainerToMember({ assignID = ID.unique(),userID, trainerID, }) {
         try {
             return await this.database.createDocument(
                 conf.appwriteDatabaseID,
@@ -200,7 +200,7 @@ export class AdminService {
                 assignID,
                 {
                     assignID,
-                   gymID,
+                  
                     userID,
                     trainerID,
                     

@@ -44,6 +44,8 @@ function PlansPage() {
       const registrationDate = new Date().toISOString();
       const expiryDate = new Date(Date.now() + plan.duration * 30 * 24 * 60 * 60 * 1000).toISOString();
 
+      
+
       const bookingPayload = {
         userName: userData.name,
         userEmail: userData.email,
@@ -52,9 +54,11 @@ function PlansPage() {
         userID: userData.$id,
         planID: plan.$id,
         title: plan.title,
+        price: String(plan.price),
         registrationDate,
         expiryDate,
       };
+      console.log("📦 Booking payload being sent:", bookingPayload);
 
       // Create or update member plan
       if (!memberDocID) {

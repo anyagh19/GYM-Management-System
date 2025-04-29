@@ -27,19 +27,19 @@ function SignUp() {
     try {
       let userData;
 
-      if (selectedRole === 'admin') {
-        userData = await authService.createAccount({
-          adminID: ID.unique(),
-          adminEmail: data.adminEmail,
-          adminPassword: data.adminPassword,
-          adminName: data.adminName,
-          role: selectedRole,
-          gymName: data.gymName || '',
-          gymAddress: data.gymAddress || '',
-          gymDescription: data.description || '',
-          gymImages: ''
-        });
-      }
+      // if (selectedRole === 'admin') {
+      //   userData = await authService.createAccount({
+      //     adminID: ID.unique(),
+      //     adminEmail: data.adminEmail,
+      //     adminPassword: data.adminPassword,
+      //     adminName: data.adminName,
+      //     role: selectedRole,
+      //     gymName: data.gymName || '',
+      //     gymAddress: data.gymAddress || '',
+      //     gymDescription: data.description || '',
+      //     gymImages: ''
+      //   });
+      // }
 
       if (selectedRole === 'trainer') {
         userData = await trainerService.createTrainerApplication({
@@ -99,7 +99,7 @@ function SignUp() {
           <Logo />
           <p className="mt-2 font-semibold text-gray-700 text-lg">Sign up as:</p>
           <div className="flex justify-center gap-3 mt-3">
-            {['admin', 'member', 'trainer'].map(role => (
+            {[ 'member', 'trainer'].map(role => (
               <button
                 key={role}
                 onClick={() => handleRoleSelect(role)}
@@ -139,21 +139,7 @@ function SignUp() {
                 </>
               )}
 
-              {selectedRole === 'admin' && (
-                <>
-                  <Input type="email" placeholder="Email" {...register('adminEmail', { required: true })} />
-                  <Input type="password" placeholder="Password" {...register('adminPassword', { required: true })} />
-                  <Input type="text" placeholder="Admin Name" {...register('adminName', { required: true })} />
-                  <Input type="text" placeholder="Gym Name" {...register('gymName', { required: true })} />
-                  <Input type="text" placeholder="Gym Address" {...register('gymAddress', { required: true })} />
-                  <textarea
-                    placeholder="Gym Description"
-                    {...register('description', { required: true })}
-                    className="py-3 px-4 bg-gray-100 border border-gray-300 rounded-md resize-none focus:ring-[#007b55]"
-                    rows={3}
-                  />
-                </>
-              )}
+              
 
               <Link to="/login" className="text-center text-sm text-[#007b55] hover:underline">
                 Already have an account?

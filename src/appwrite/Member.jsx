@@ -156,6 +156,20 @@ class MemberService {
       throw error;
     }
   }
+
+  async getMember(docID) {
+    try {
+      return await this.database.getDocument(
+        conf.appwriteDatabaseID,
+        conf.appwriteUsersCollectionID,
+        docID
+      );
+    } catch (error) {
+      console.error("Error fetching member: ", error);
+      throw error;
+    }
+  }
+  
 }
 
 export const memberService = new MemberService();
