@@ -3,7 +3,7 @@ import adminService from "../../appwrite/Admin";
 import authService from "../../appwrite/Auth";
 import { motion } from "framer-motion";
 
-// Helper function to group bookings by month and year
+
 const groupByMonthYear = (bookings) => {
   const grouped = {};
 
@@ -68,7 +68,7 @@ function BookingHistory() {
               <div key={monthYear} className="mb-10">
                 <h2 className="text-2xl font-bold text-yellow-400 mb-4">{monthYear}</h2>
 
-                {/* Desktop Table */}
+                
                 <div className="hidden md:block overflow-x-auto">
                   <table className="min-w-full bg-gray-800 text-sm md:text-base rounded-lg overflow-hidden shadow">
                     <thead className="bg-gray-700 text-gray-300">
@@ -107,7 +107,7 @@ function BookingHistory() {
                   </table>
                 </div>
 
-                {/* Mobile Cards */}
+                
                 <div className="block md:hidden space-y-4">
                   {bookings.map((user, index) => (
                     <motion.div

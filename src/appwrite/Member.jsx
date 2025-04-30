@@ -170,6 +170,44 @@ class MemberService {
     }
   }
   
+  async getDietPlan(userID) {
+    try {
+      const res = await this.database.listDocuments(
+        conf.appwriteDatabaseID,
+        conf.appwriteDietPlanCollectionID,
+        [Query.equal("userID", userID)]
+      );
+  
+      if (res.documents.length === 0) {
+        throw new Error("No diet plan found for this user.");
+      }
+  
+      return res.documents[0];
+    } catch (error) {
+      console.error("Error fetching diet plan: ", error);
+      throw error;
+    }
+  }
+  
+  async getWorkoutPlan(userID) {
+    try {
+      const res = await this.database.listDocuments(
+        conf.appwriteDatabaseID,
+        conf.appwriteWorkoutPlanCollectionID,
+        [Query.equal("userID", userID)]
+      );
+  
+      if (res.documents.length === 0) {
+        throw new Error("No diet plan found for this user.");
+      }
+  
+      return res.documents[0];
+    } catch (error) {
+      console.error("Error fetching diet plan: ", error);
+      throw error;
+    }
+  }
+  
 }
 
 export const memberService = new MemberService();
