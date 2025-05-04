@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage.jsx'
 import { About, AdminDash, ApplicationsForTrainer, AssignTrainer, AtendenceHistory, AttendancePage, BookingHistory, ContactPage, DietPage, EditPlan, Feedback, GymCardPage, GymPage, GymPlans, LogIn, Packages, PlanForm, PlansPage, RegisteredTrainer, RegisteredUser, SetDietPlan, SetWorkoutPlan, SignUp, TrainerApplicationForm, TrainerDash, UserDash, WorkoutPage } from '../Index.js'
 import { Provider } from 'react-redux'
 import store from './store/Store.js'
+import Dashboard from './pages/Admin/Dashboard.jsx'
 
 const router = createBrowserRouter([
   {
@@ -35,20 +36,55 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin',
-        element: <AdminDash />
+        element: <AdminDash />,
+        children: [
+          {
+           index: true,
+          element: <Dashboard />
+          },
+          {
+            path: 'total_packages',
+            element: <Packages />
+          },
+          {
+            path: 'plan_form',
+            element: <PlanForm />
+          },
+          {
+            path: 'edit_plan/:id',
+            element: <EditPlan />
+          },
+          {
+            path: 'registered_user',
+            element: <RegisteredUser />
+          },
+          {
+            path: 'applications_for_trainer',
+            element: <ApplicationsForTrainer />
+          },
+          {
+            path: 'assign_trainer/:userID/:gymID',
+            element: <AssignTrainer />
+          },
+          {
+            path: 'registered_trainer',
+            element: <RegisteredTrainer />
+          },
+          {
+            path: 'booking_history',
+            element: <BookingHistory />
+          },
+          {
+            path: 'feedback',
+            element: <Feedback />
+          },
+          {
+            path: 'atendence-history',
+            element: <AtendenceHistory />
+          }
+        ]
       },
-      {
-        path: '/total_packages',
-        element: <Packages />
-      },
-      {
-        path: '/plan_form',
-        element: <PlanForm />
-      },
-      {
-        path: '/edit_plan/:id',
-        element: <EditPlan />
-      },
+      
       {
         path: '/pricing',
         element: <PlansPage />
@@ -69,10 +105,7 @@ const router = createBrowserRouter([
         path: '/trainer',
         element: <TrainerDash />
       },
-      {
-        path: '/registered_user',
-        element: <RegisteredUser />
-      },
+      
       {
         path: '/gym_card',
         element: <GymCardPage />
@@ -85,18 +118,8 @@ const router = createBrowserRouter([
         path: '/trainer_application',
         element: <TrainerApplicationForm />
       },
-      {
-        path: '/applications_for_trainer',
-        element: <ApplicationsForTrainer />
-      },
-      {
-        path: '/assign_trainer/:userID/:gymID',
-        element: <AssignTrainer />
-      },
-      {
-        path: '/registered_trainer',
-        element: <RegisteredTrainer />
-      },
+      
+      
       {
         path: '/gym_plans/:adminID',
         element: <GymPlans />
@@ -113,18 +136,7 @@ const router = createBrowserRouter([
         path: '/diet',
         element: <DietPage />
       },
-      {
-        path: '/booking_history',
-        element: <BookingHistory />
-      },
-      {
-        path: '/feedback',
-        element: <Feedback />
-      },
-      {
-        path: '/atendence-history',
-        element: <AtendenceHistory />
-      }
+      
     ]
   }
 ])

@@ -23,6 +23,8 @@ function RegisteredUser() {
       }
     };
     fetchUsers();
+    // Smooth scroll to top on mount
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   const handleAssignTrainer = (userID) => {
@@ -33,7 +35,7 @@ function RegisteredUser() {
   const handleDeleteUser = async (userID) => {
     try {
       await memberService.deleteMember(userID);
-      await adminService.deleteAssignTrainer(userID)
+      await adminService.deleteAssignTrainer(userID);
       setUsers(users.filter(user => user.$id !== userID));
       alert("User deleted successfully!");
     } catch (error) {
@@ -44,7 +46,7 @@ function RegisteredUser() {
 
   return (
     <motion.div
-      className="p-6 bg-gray-900 min-h-screen text-white"
+      className="p-6 bg-gray-900 min-h-screen text-white scroll-smooth overflow-auto"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
