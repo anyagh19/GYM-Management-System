@@ -5,6 +5,9 @@ import { toast } from 'react-toastify';
 import { PlanCard } from '../../Index';
 import adminService from '../appwrite/Admin';
 import memberService from '../appwrite/Member';
+import authService from '../appwrite/Auth';
+
+const RAZORPAY_KEY_ID = 'rzp_test_kxwK4KltT9lbKS';
 
 function PlansPage() {
   const [plans, setPlans] = useState([]);
@@ -31,7 +34,18 @@ function PlansPage() {
     fetchPlans();
   }, []);
 
-  // Handle plan purchase
+  // Load Razorpay script
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  // Handle plan purchase with payment
   const handleBuy = async (plan) => {
     if (!userData) {
       toast.error("Please login to purchase a plan.");
@@ -39,44 +53,80 @@ function PlansPage() {
     }
 
     try {
-      let memberDocID = await memberService.getMemberDocIDByUserID(userData.$id);
+      const isScriptLoaded = await loadRazorpayScript();
 
+      if (!isScriptLoaded) {
+        toast.error("Razorpay SDK failed to load. Are you online?");
+        return;
+      }
+
+      const userID = userData.$id;
       const registrationDate = new Date().toISOString();
       const expiryDate = new Date(Date.now() + plan.duration * 30 * 24 * 60 * 60 * 1000).toISOString();
-
-      
 
       const bookingPayload = {
         userName: userData.name,
         userEmail: userData.email,
         userPhone: userData.phone ?? '',
         userAddress: userData.address ?? '',
-        userID: userData.$id,
+        userID: userID,
         planID: plan.$id,
         title: plan.title,
         price: String(plan.price),
         registrationDate,
         expiryDate,
       };
-      console.log("📦 Booking payload being sent:", bookingPayload);
 
-      // Create or update member plan
-      if (!memberDocID) {
-        await memberService.createMember({
-          ...bookingPayload,
-          userPassword: userData.password ?? '',
-        });
-      } else {
-        await memberService.updateMemberPlan(memberDocID, plan.$id, plan.duration * 30);
-      }
+      const options = {
+        key: RAZORPAY_KEY_ID,
+        amount: plan.price * 100, // Convert to paise
+        currency: 'INR',
+        name: 'Gym Management System',
+        description: `Purchase ${plan.title} Plan`,
+        image: '/logo.png',
+        handler: async (response) => {
+          try {
+            let memberDocID = await memberService.getMemberDocIDByUserID(userID);
 
-      await memberService.bookingHistory(bookingPayload);
+            // Create or update member plan
+            if (!memberDocID) {
+              await memberService.createMember({
+                ...bookingPayload,
+                userPassword: userData.password ?? '',
+              });
+            } else {
+              await memberService.updateMemberPlan(memberDocID, plan.$id, plan.duration * 30);
+            }
 
-      toast.success(`🎉 Successfully bought ${plan.title} plan!`);
-      navigate('/member');
+            // Record booking history
+            await memberService.bookingHistory(bookingPayload);
+
+            toast.success(`🎉 Successfully purchased ${plan.title} plan!`);
+            navigate('/member');
+          } catch (err) {
+            console.error("❌ Error processing booking:", err);
+            toast.error("Failed to complete booking. Please try again.");
+          }
+        },
+        prefill: {
+          name: userData.name,
+          email: userData.email,
+          contact: userData.phone ?? '',
+        },
+        notes: {
+          address: userData.address ?? '',
+        },
+        theme: {
+          color: '#3399cc',
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+
     } catch (err) {
-      console.error("❌ Error buying plan:", err);
-      toast.error("Failed to purchase plan. Please try again.");
+      console.error("❌ Error initiating payment:", err);
+      toast.error("Failed to initiate payment. Please try again.");
     }
   };
 
@@ -93,7 +143,6 @@ function PlansPage() {
               price={`${plan.price}`}
               duration={`${plan.duration} Month`}
               onBuy={() => handleBuy(plan)}
-              // Add onUpdate, onDelete if needed for updating and deleting plans
             />
           </div>
         ))
